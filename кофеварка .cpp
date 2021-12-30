@@ -1,24 +1,84 @@
+Програмный код 
 #include 
-    // подключяем библиотеку для работы с Wi-Fi server
-    #include <WiFi.h>
-    // указываем пины, к которым подключены светодиоды
-    #define LED_GREEN 16
-    #define LED_RED   17
-    // вводим имя и пароль точки доступа
-    const char* ssid     = "WIFINAME";
-    const char* password = "WIFIPASSWORD";
-    // инициализируем сервер на 80 порте
-    WiFiServer server(80);
-    // создаем буфер и счетчик для буфера
-    char lineBuf[80];
+#include 
+#include
+#define 
+#define 
+int aPin=A0;
+// контакт  подключения вывода реле
+int soundPin=11;
+// частота звукового сигнала
+int freq[3]={587,466,293};
+// переменная для сохранения значения датчика
+int avalue=0;
+// значение уровней
+int levels[3]={600,500,400};
+// текущий уровень
+int level=0;
+
+void setup()
+  {
+  // инициализация последовательного порта
+  Serial.begin(9600);
+  // настройка выводов индикации светодиодов
+  // в режим OUTPUT
+  pinMode(soundPin,OUTPUT);
+  }
+
+void loop()
+  {
+  // получение значения с аналогового вывода датчика
+  avalue=analogRead(aPin);
+  // вывод значения в монитор последовательного порта Arduino
+  Serial.print("avalue=");Serial.println(avalue);
+  // вывод звука различной частоты для разных уровней погружения
+  if(avalue>levels[0])
+    tone(soundPin,freq[0],2000);
+  else if(avalue>levels[1])
+    tone(soundPin,freq[1],2000);
+  else if(avalue>levels[2])
+    tone(soundPin,freq[2],2000);
+  else
+    noTone(soundPin);
+  // пауза перед следующим получением значения 1000 мс
+  delay(1000);
+}
+const char 
+const char 
+WiFiServer 
+ char lineBuf[80];
     int charCount = 0;
      
     void setup() {
         // запас времени на открытие монитора порта — 5 секунд
         delay(5000);
         // инициализируем контакты для светодиодов
-        pinMode(LED_GREEN, OUTPUT);
-        pinMode(LED_RED, OUTPUT);
+        pinMode(RELAY, OUTPUT);
+      pinMode(term ,INPUT);
+      pinMode 
+      
+
+
+)
+
+func main() {
+	// On board LED is connected to GPIO 2
+	led := machine.Pin(2)
+	// Configure PIN as output
+	led.Configure(machine.PinConfig{Mode: machine.PinOutput})
+
+	// Infinite main loop
+	for {
+		// Turn LED off
+		led.Low()
+		// Wait for 1 second
+		time.Sleep(time.Millisecond * 1000)
+		// Turn LED on
+		led.High()
+		// Wait for 1 second
+		time.Sleep(time.Millisecond * 1000)
+	}
+        pinMode(, OUTPUT);
         // инициализируем монитор порта
         Serial.begin(115200);
         // подключаемся к Wi-Fi сети
@@ -34,33 +94,32 @@
         Serial.println("");
         Serial.println("Wi-Fi connected");  
         Serial.println("IP-address: "); 
-        // пишем IP-адрес в монитор порта   
+           
         Serial.println(WiFi.localIP());
         server.begin();
-    }
-     
-    void loop() {
-        // анализируем канал связи на наличие входящих клиентов
+    } 
+                    void loop() {
+        
         WiFiClient client = server.available();
         if (client) {
-            Serial.println("New client");  
-            memset(lineBuf, 0, sizeof(lineBuf));
+            Serial.println("New client");  //напечатать сообщение  New client 
+            memset(lineBuf, 0, sizeof(lineBuf)); // установка памяти для буффера 
             charCount = 0;
-            // HTTP-запрос заканчивается пустой строкой
+            // HTTP-
             boolean currentLineIsBlank = true;
-            while (client.connected()) {
-                if (client.available()) {
-                    char c = client.read();
-                    Serial.write(c);
-                    // считываем HTTP-запрос
+            while (client.connected()) {// когда клиент подключен 
+                if (client.available()) {// если клиент в нормальном состоянии 
+                    char c = client.read();//прочитать значение 
+                    Serial.write(c); // записать значение 
+                    
                     lineBuf[charCount] = c;
-                    if (charCount < sizeof(lineBuf) - 1) {
+                    if (charCount < sizeof(lineBuf) - 1) {//поддержка размера буффера обмена 
                         charCount++;
                     }
-                    // на символ конца строки отправляем ответ
-                    if (c == '\n' && currentLineIsBlank) {
-                        // отправляем стандартный заголовок HTTP-ответа
-                        client.println("HTTP/1.1 200 OK");
+                    
+                    if (c == '\n' && currentLineIsBlank) {//
+                        
+                        client.println("HTTP/1.1 200 OK");//напечатать на стороне клиента фразу в скобках 
                         client.println("Content-Type: text/html");
                         // тип контента: text/html
                         client.println("Connection: close");
@@ -73,21 +132,25 @@
                         webPage +="    <meta name=\"viewport\" content=\"width=device-width,";
                         webPage +="    initial-scale=1\">";
                         webPage +="  </head>";
-                        webPage +="  <h1>ESP32 - Web Server</h1>";
+                        webPage +="  <h1>ESP32 - Web Server</h1>";//прописывается заголовок 
                         webPage +="  <p>LED #1";
-                        webPage +="    <a href=\"on1\">";
-                        webPage +="      <button>ON</button>";
-                        webPage +="    </a>&nbsp;";
-                        webPage +="    <a href=\"off1\">";
-                        webPage +="      <button>OFF</button>";
+                        webPage +="    <a href=\"pump_on\">";
+                    
+                        webPage +="      <button>PUMP_ON</button>"//создается объект кнопка 
+                        webPage +="    </a>&nbsp;"; 
+                        webPage +="  <a href=\"temperature"\">"; 
+                        webPage +=   <
+                        webPage +="  <a href=\"humidity"\">"; 
+                        webPage +="    <a href=\"pump_off\">";
+                        webPage +="      <button>PUMP_OFF</button>";
                         webPage +="    </a>";
                         webPage +="  </p>";
                         webPage +="  <p>LED #2";
-                        webPage +="    <a href=\"on2\">";
-                        webPage +="      <button>ON</button>";
+                        webPage +="    <a href=\"led_on\">";
+                        webPage +="      <button>LED_ON</button>";
                         webPage +="    </a>&nbsp;";
-                        webPage +="    <a href=\"off2\">";
-                        webPage +="      <button>OFF</button>";
+                        webPage +="    <a href=\"led_off\">";
+                        webPage +="      <button>LED_OFF</button>";
                         webPage +="    </a>";
                         webPage +="  </p>";
                         webPage +="</html>";
@@ -95,21 +158,23 @@
                         break;
                     }
                     if (c == '\n') {
-                        // анализируем буфер на наличие запросов 
-                        // если есть запрос, меняем состояние светодиода
+                        // анализируем буфер на наличие запросов   // если есть запрос, меняем состояние светодиода
                         currentLineIsBlank = true;
-                        if (strstr(lineBuf, "GET /on1") > 0) {
-                            Serial.println("LED 1 ON");
-                            digitalWrite(LED_GREEN, HIGH);
-                        } else if (strstr(lineBuf, "GET /off1") > 0) {
-                            Serial.println("LED 1 OFF");
-                            digitalWrite(LED_GREEN, LOW);
-                        } else if (strstr(lineBuf, "GET /on2") > 0) {
-                            Serial.println("LED 2 ON");
-                            digitalWrite(LED_RED, HIGH);
-                        } else if (strstr(lineBuf, "GET /off2") > 0) {
-                            Serial.println("LED 2 OFF");
-                            digitalWrite(LED_RED, LOW);
+                        if (strstr(lineBuf, "GET /pump_on") > 0) {
+                            Serial.println("PUMP  ON");
+                            digitalWrite(PUMP, HIGH);
+                        } else if (strstr(lineBuf, "GET /pump_off") > 0) {
+                            Serial.println("PUMP OFF");
+                            digitalWrite(PUMP, LOW);
+                        } else if (strstr(lineBuf, "GET /led_lamp on") > 0) {
+                            Serial.println("LED_LAMP ON");
+                            digitalWrite(LED_LAMP, HIGH);
+                        } else if (strstr(lineBuf, "GET /led_lamp off") > 0) {
+                            
+                            Serial.println("LED_LAMP OFF");
+                            digitalWrite(LED_LAMP, LOW); 
+                             } else if (strstr(lineBuf, "GET /led_lamp off") > 0) { 
+                              
                         }
                         // начинаем новую строку
                         currentLineIsBlank = true;
@@ -128,42 +193,3 @@
             Serial.println("client disconnected"); 
         }
     }
-
-
-#define sensorPower1 7 //иницилизация пинов датчиков уровня 
-#define SENSOR_1 A0 //иницилизация входов датчиков уровня 
-#define l
-int val = 0; / Переменная для хранения значения уровня воды
-
-#define PIN_RELAY 10//инициализация пинов реле
-void setup() {
-pinMode(RElAY_1 ,OUTPUT);//инициализадия выходов реле 
-pinMode(SENSOR_1,INPUT);//инициализация входов 
-
-void loop 
-int level = readSensor();
-
-  Serial.print("Water level: ");// получить показания из функции b hfcgtxfnfnm
-  Serial.println(level);
-
-  delay(1000);
-}
-
-// Данная функция используется для получения показаний
-int readSensor() 
-{
-  digitalWrite(SENSOR_1, HIGH);  // Включить датчик
-  delay(10);                        // Ждать 10 миллисекунд
-  int val = analogRead(sensorPin);  // Прочитать аналоговое значение от датчика
-  if (val>10)                      //Если уровень выше 10 то запустить реле 
-  DigitalWrite(RELAY_1 HIGH)
-  digitalWrite(SENSOR_1, LOW);   // Выключить датчик
-  return val;                       // Вернуть текущее показание
-}int level = readSensor();
-
-  Serial.print("Water level: ");
-  Serial.println(level);
-
-  delay(1000);
-}
-
