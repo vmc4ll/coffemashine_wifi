@@ -1,10 +1,3 @@
-Програмный код 
-#include 
-#include 
-#include
-#define 
-#define 
-
 
 void loop()
   {
