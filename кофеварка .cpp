@@ -14,7 +14,7 @@ WiFiServer
         // инициализируем контакты для светодиодов
         pinMode(RELAY, OUTPUT);
       pinMode(term ,INPUT);
-      pinMode 
+      pinMode(level,INPUT);
       
 
 
@@ -22,25 +22,23 @@ WiFiServer
 
 func main() {
 	// On board LED is connected to GPIO 2
-	led := machine.Pin(2)
+	relay := machine.Pin(2)
 	// Configure PIN as output
-	led.Configure(machine.PinConfig{Mode: machine.PinOutput})
+	relay.Configure(machine.PinConfig{Mode: machine.PinOutput})
 
 	// Infinite main loop
 	for {
-		// Turn LED off
-		led.Low()
-		// Wait for 1 second
-		time.Sleep(time.Millisecond * 1000)
+		
+		relay.Low()//
+	
+		time.Sleep(time.Millisecond * 1000)//
 		// Turn LED on
-		led.High()
+		relay.High()//
 		// Wait for 1 second
-		time.Sleep(time.Millisecond * 1000)
+		time.Sleep(time.Millisecond * 1000)//
 	}
-        pinMode(, OUTPUT);
-        // инициализируем монитор порта
-        Serial.begin(115200);
-        // подключаемся к Wi-Fi сети
+        pinMode(, OUTPUT);// инициализируем монитор порта
+        Serial.begin(115200) // подключаемся к Wi-Fi сети
         Serial.println();
         Serial.println();
         Serial.print("Connecting to ");  
@@ -58,19 +56,16 @@ func main() {
         server.begin();
     } 
                     void loop() {
-        
         WiFiClient client = server.available();
         if (client) {
             Serial.println("New client");  //напечатать сообщение  New client 
             memset(lineBuf, 0, sizeof(lineBuf)); // установка памяти для буффера 
             charCount = 0;
-            // HTTP-
             boolean currentLineIsBlank = true;
             while (client.connected()) {// когда клиент подключен 
                 if (client.available()) {// если клиент в нормальном состоянии 
                     char c = client.read();//прочитать значение 
                     Serial.write(c); // записать значение 
-                    
                     lineBuf[charCount] = c;
                     if (charCount < sizeof(lineBuf) - 1) {//поддержка размера буффера обмена 
                         charCount++;
@@ -79,13 +74,10 @@ func main() {
                     if (c == '\n' && currentLineIsBlank) {//
                         
                         client.println("HTTP/1.1 200 OK");//напечатать на стороне клиента фразу в скобках 
-                        client.println("Content-Type: text/html");
-                        // тип контента: text/html
-                        client.println("Connection: close");
-                        // после отправки ответа связь будет отключена
+                        client.println("Content-Type: text/html");// тип контента: text/html
+                        client.println("Connection: close"); // после отправки ответа связь будет отключена
                         client.println();
-                        // формируем веб-страницу 
-                        String webPage = "<!DOCTYPE HTML>";
+                        String webPage = "<!DOCTYPE HTML>";// формируем веб-страницу 
                         webPage +="<html>";
                         webPage +="  <head>";
                         webPage +="    <meta name=\"viewport\" content=\"width=device-width,";
@@ -116,8 +108,7 @@ func main() {
                         client.println(webPage);
                         break;
                     }
-                    if (c == '\n') {
-                        // анализируем буфер на наличие запросов   // если есть запрос, меняем состояние светодиода
+                    if (c == '\n') {  // анализируем буфер на наличие запросов   // если есть запрос, меняем состояние светодиода
                         currentLineIsBlank = true;
                         if (strstr(lineBuf, "GET /pump_on") > 0) {
                             Serial.println("PUMP  ON");
@@ -132,23 +123,19 @@ func main() {
                             
                             Serial.println("LED_LAMP OFF");
                             digitalWrite(LED_LAMP, LOW); 
-                             } else if (strstr(lineBuf, "GET /led_lamp off") > 0) { 
+                             } else if (strstr(lineBuf, "GET /led_lamp off") > 0) { // начинаем новую строку
                               
-                        }
-                        // начинаем новую строку
+                        }  
                         currentLineIsBlank = true;
                         memset(lineBuf, 0, sizeof(lineBuf));
                         charCount = 0;
-                    } else if (c != '\r') {
-                        // в строке попался новый символ
-                        currentLineIsBlank = false;
+                    } else if (c != '\r') { // в строке попался новый символ
+                        currentLineIsBlank = false;// даем веб-браузеру время, чтобы получить данные
                     }
                 }
             }
-            // даем веб-браузеру время, чтобы получить данные
             delay(1);
-            // закрываем соединение
-            client.stop();
+            client.stop(); // закрываем соединение
             Serial.println("client disconnected"); 
         }
     }
