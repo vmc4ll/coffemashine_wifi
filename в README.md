@@ -1,5 +1,4 @@
 # coffemashine_wifi
-наработки по проекту умной кофемашины для журнала хакер 
-в данном репрозитории будут лежать файлы по проекту умная кофеварка . 
-данное устройство работает по протоколу http , пока что сможет включаться тепловой элемент для подогрева , сама кофеварка будет гейзерной . В данной конструкции также будет использовано
-2 вида датчиков датчик уровня воды , при определенном уровне будет даноа возможность включения ТЭН . Также будет использован датчик температуры для выключения ТЭН . 
+his is my graduation project on the development of a smart coffee maker.
+so far, the functionality is turning on and off at the touch of a button and depending on the readings of the sensors.
+in the future I want to attach an update system and conduct a security audit on the finished version
